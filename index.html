@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arkiv – Monumenter, gravsteiner, skrift og skulpturer</title>
+<meta name="description" content="Digitalt arkiv over monumenter, gravsteiner, skrift og skulpturer av historisk verdi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+
+<header class="top">
+  <h1 class="wordmark">ARKIV</h1>
+  <div class="bar">
+    <nav class="nav" aria-label="Hovedmeny" id="nav"></nav>
+    <button class="play-btn" id="playStart" type="button"><svg width="9" height="10" viewBox="0 0 9 10" aria-hidden="true"><path d="M0 0 L9 5 L0 10 Z" fill="currentColor"/></svg>AVSPILLING</button>
+    <span class="clock">OSLO, NO&nbsp;&nbsp;<span id="clock">--:--:--</span></span>
+  </div>
+</header>
+
+<main id="katalog" class="katalog">
+  <div class="intro">
+    <p class="lead">Monumenter, gravsteiner, skrift og skulpturer av historisk verdi, 1100–2026.</p>
+    <p class="count"><span class="mono" id="count">00</span>&nbsp;&nbsp;OBJEKTER</p>
+  </div>
+
+  <form class="search" role="search" id="searchForm">
+    <label class="sr" for="q">Søk i arkivet</label>
+    <input id="q" type="search" placeholder="Søk etter objekt, sted, materiale, skaper eller katalognummer" autocomplete="off">
+    <div class="tools">
+      <div class="group"><span class="muted">SØK I</span>
+        <button type="button" class="t" data-mode="meta">METADATA</button>
+        <button type="button" class="t" data-mode="text">FULLTEKST</button>
+      </div>
+      <div class="group"><span class="muted">SORTER</span>
+        <button type="button" class="t" data-sort="aar">ÅR</button>
+        <button type="button" class="t" data-sort="tittel">TITTEL</button>
+        <button type="button" class="t" data-sort="id">KAT.NR</button>
+      </div>
+      <div class="group right"><span class="muted">VIS</span>
+        <button type="button" class="t" data-view="index">INDEKS</button>
+        <button type="button" class="t" data-view="gallery">GALLERI</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="layout">
+    <aside class="filters" aria-label="Filtre">
+      <section>
+        <h2>DATERING</h2>
+        <div class="hist" id="hist"></div>
+        <div class="range">
+          <input type="range" id="fromR" min="1100" max="2026" step="1" aria-label="Fra år">
+          <input type="range" id="toR" min="1100" max="2026" step="1" aria-label="Til år">
+        </div>
+        <div class="years">
+          <label>FRA<input type="number" id="fromN" min="1100" max="2026"></label>
+          <label class="end">TIL<input type="number" id="toN" min="1100" max="2026"></label>
+        </div>
+      </section>
+      <div id="facets"></div>
+      <button type="button" class="link-btn" id="reset" hidden>NULLSTILL FILTRE</button>
+    </aside>
+
+    <section class="results" aria-label="Resultater" aria-live="polite">
+      <div id="empty" class="empty" hidden>
+        <p>Ingen objekter samsvarer med søket.</p>
+        <button type="button" class="link-btn" id="reset2">NULLSTILL FILTRE</button>
+      </div>
+      <div id="indexView" class="index-view">
+        <div class="index-scroll">
+          <div class="row head" aria-hidden="true"><span>KAT.NR</span><span>OBJEKT</span><span>MATERIALE</span><span>STED</span><span class="r">ÅR</span></div>
+          <ul id="indexList" class="index-list"></ul>
+        </div>
+        <div class="preview" id="preview"></div>
+      </div>
+      <ul id="galleryView" class="gallery" hidden></ul>
+    </section>
+  </div>
+</main>
+
+<main id="om" class="om" hidden>
+  <p class="om-lead">Et digitalt arkiv over monumenter, gravsteiner, skrift og skulpturer av historisk verdi. Hvert objekt registreres med katalognummer, datering, materiale, mål, sted, skaper, inskripsjon, vernestatus og om det er skannet.</p>
+  <div class="om-grid">
+    <div><p class="lbl">01 MONUMENTER</p><p>Minnesmerker, bautaer, obelisker og minnesteiner i offentlig rom.</p></div>
+    <div><p class="lbl">02 GRAVSTEINER</p><p>Gravminner fra middelalder til i dag – heller, stående steiner og kors.</p></div>
+    <div><p class="lbl">03 SKRIFT</p><p>Skrifttyper av historisk verdi – med vekt på skrift brukt i innhogd tekst.</p></div>
+    <div><p class="lbl">04 SKULPTURER</p><p>Frittstående skulptur, relieff og byster.</p></div>
+  </div>
+  <p class="lbl">KONTAKT [E-POST] · ANSVARLIG [NAVN]</p>
+</main>
+
+<footer class="foot">
+  <span>© 2026 [ARKIVNAVN]</span>
+  <span class="c">MONUMENTER · GRAVSTEINER · SKRIFT · SKULPTURER</span>
+  <span class="r">EKSEMPELDATA</span>
+</footer>
+
+<div class="drawer" id="drawer" hidden>
+  <button class="scrim" type="button" id="drawerScrim" aria-label="Lukk detaljvisning"></button>
+  <aside class="panel" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <div class="panel-top"><span id="dMeta"></span><button type="button" class="t dark" id="dClose">LUKK ✕</button></div>
+    <div class="media wide" id="dMedia"></div>
+    <div class="panel-body">
+      <h2 id="dTitle"></h2>
+      <p id="dDesc" class="desc"></p>
+      <dl id="dFields" class="fields"></dl>
+      <div class="pager"><button type="button" class="t dark" id="dPrev">← FORRIGE</button><button type="button" class="t dark" id="dNext">NESTE →</button></div>
+    </div>
+  </aside>
+</div>
+
+<div class="player" id="player" role="dialog" aria-modal="true" aria-label="Avspilling" hidden>
+  <div class="player-top">
+    <span>AVSPILLING&nbsp;&nbsp;<span class="mono" id="pPos"></span></span>
+    <div class="player-ctrl">
+      <button type="button" class="t dark" id="pPrev">← FORRIGE</button>
+      <button type="button" class="t dark" id="pToggle">❚❚ PAUSE</button>
+      <button type="button" class="t dark" id="pNext">NESTE →</button>
+      <button type="button" class="t dark" id="pClose">LUKK ✕</button>
+    </div>
+  </div>
+  <div class="progress"><div id="pBar"></div></div>
+  <div class="player-body">
+    <div class="media tall" id="pMedia"></div>
+    <div class="player-info">
+      <span class="lbl" id="pMeta"></span>
+      <h2 id="pTitle"></h2>
+      <p id="pDesc" class="desc"></p>
+      <dl id="pFields" class="fields"></dl>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
